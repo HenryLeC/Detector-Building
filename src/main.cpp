@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <Adafruit_NAU7802.h>
+#include <SparkFun_Qwiic_Scale_NAU7802_Arduino_Library.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -12,13 +12,12 @@
 #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-Adafruit_NAU7802 nau;
+NAU7802 nau;
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Wire.begin();
-  Wire.setClock(400000);
 
   if (!nau.begin())
   {
@@ -29,21 +28,21 @@ void setup()
     Serial.println("Found NAU7802");
   }
 
-  nau.setLDO(NAU7802_3V0);
+  nau.setLDO(NAU7802_LDO_3V0);
   Serial.println("LDO voltage set to 3.0V");
 
   nau.setGain(NAU7802_GAIN_128);
   Serial.println("Gain set to 128x");
 
-  nau.setRate(NAU7802_RATE_10SPS);
-  Serial.println("Conversion rate set to 10 SPS");
+  nau.setSampleRate(NAU7802_SPS_80);
+  Serial.println("Conversion rate set to 80 SPS");
 
   // Take 10 readings to flush out readings
   for (uint8_t i = 0; i < 10; i++)
   {
     while (!nau.available())
       delay(1);
-    nau.read();
+    nau.getReading();
   }
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
@@ -70,7 +69,7 @@ void loop()
     delay(1);
   }
 
-  int32_t val = nau.read();
+  int32_t val = nau.getReading();
 
   display.clearDisplay();
   display.setCursor(0, 0);
