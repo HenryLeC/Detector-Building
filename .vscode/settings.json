@@ -1,5 +1,17 @@
 {
     "cSpell.words": [
-        "Adafruit"
+        "Adafruit",
+        "BLUELED",
+        "dtostrf",
+        "GPIO",
+        "GREENLED",
+        "Jiang",
+        "LEDS",
+        "OLED",
+        "REDLED",
+        "SAMPLERATE",
+        "ssd1306xled_font8x16",
+        "TEAMNAME",
+        "TEAMNUMBER"
     ]
 }
